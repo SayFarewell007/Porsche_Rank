@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="gbk"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 	public ArrayList<HashMap<String, String>> getCarBrands();
+
+	public ArrayList<Car> getCarTypesByBrand(String id); 
+	
+	
+	public String getCarBrandNameById(String id);
+	
+	public String getCarTypeNameById(String id, String typeID);-->
+	
+<mapper namespace="leon.sms.mapper.CarsMapper">
+
+	<select id="getCarBrands" resultType="Map">
+		select id, name from
+		ims_autoparts_car_brand
+	</select>
+
+	<select id="getCarTypesByBrand" parameterType="String" resultType="leon.sms.pojo.Car">
+		select * from ims_autoparts_car_type where brand_id = #{id}
+	</select>
+	
+	<select id="getCarBrandNameById" parameterType="String" resultType="String">
+		select name from ims_autoparts_car_brand where id = #{id}
+	</select>
+	
+	
+	<select id="getCarTypeNameById" parameterType="String" resultType="String">
+		select name from ims_autoparts_car_type where id = #{id}
+	</select>
+	
+
+</mapper>
+    
