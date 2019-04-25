@@ -214,7 +214,7 @@
 			<tr>
 			<td>
 			
-			如果车辆是<select name="condition8" class="easyui-combobox" style="width:100px;" data-options="editable: false " >
+			如果车辆是<select id="condition1_paymode" name="condition1_paymode" class="easyui-combobox" style="width:100px;" data-options="editable: false " >
 					 <option value="0" selected>条件1</option>
 					 <option value="1">先付后贷车辆</option>
     		     	 <option value="2">正常贷款车辆</option>
@@ -222,10 +222,11 @@
     
 				</select>
 				时，记
-			    <input class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
+			    <input id="point1_paymode" name="point1_paymode" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
     		</td>
     		<td>
-    		<a href="deleteOrder?id=${c.id}" class="btn btn-default">增加规则</a>
+    		<a href="javascript:void(0);" onclick="addPayModeTypeRule()"  class="btn btn-default">增加规则</a>
+    		<a href="javascript:void(0);" onclick="delPayModeTypeRule()"  class="btn btn-default">删除规则</a>
     		</td>			    
     		</tr>
     
@@ -233,7 +234,7 @@
   				  <tr>
   				  
   				  <td>
-  				  <div class="easyui-datalist" title="已有金融考核规则" style="width:800px;height:250px" data-options="
+  				  <div id="datalist1_paymode" class="easyui-datalist" title="已有金融考核规则" style="width:800px;height:250px" data-options="
 						url: 'datalist_data1.json',
 						method: 'get',
 						checkbox: true,
@@ -243,7 +244,7 @@
 				  </div>
   				  </td>
   				  <td>
-  				  <a href="deleteOrder?id=${c.id}" class="btn btn-default">删除规则</a>
+  				  <a href="javascript:void(0);" onclick="delPayModeTypeRule()"  class="btn btn-default">删除规则</a>
   				  </td>
   				  </tr>
   		<!-- ================================================================================================ -->			  
@@ -256,11 +257,12 @@
 			<td>
 			
 			如果收购二手车辆品牌是保时捷时，每台记
-			    <input class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分，收购其他品牌二手车1台或以上，记
-			    <input class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分。
+			    <input id="value1_secondhand" name="value1_secondhand" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分，收购其他品牌二手车1台或以上，记
+			    <input id="value2_secondhand" name="value2_secondhand" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分。
     		</td>
     		<td>
-    		<a href="deleteOrder?id=${c.id}" class="btn btn-default">增加规则</a>
+    		<a href="javascript:void(0);" onclick="addSecondHandTypeRule()"  class="btn btn-default">增加规则</a>
+    		<a href="javascript:void(0);" onclick="delSecondHandTypeRule()"  class="btn btn-default">删除规则</a>
     		</td>			    
     		</tr>
     
@@ -268,7 +270,7 @@
   				  <tr>
   				  
   				  <td>
-  				  <div class="easyui-datalist" title="已有二手车收购业务考核规则" style="width:800px;height:250px" data-options="
+  				  <div id="datalist1_secondhand" class="easyui-datalist" title="已有二手车收购业务考核规则" style="width:800px;height:250px" data-options="
 						url: 'datalist_data1.json',
 						method: 'get',
 						checkbox: true,
@@ -278,7 +280,7 @@
 				  </div>
   				  </td>
   				  <td>
-  				  <a href="deleteOrder?id=${c.id}" class="btn btn-default">删除规则</a>
+  				  <a href="javascript:void(0);" onclick="delSecondHandTypeRule()"  class="btn btn-default">删除规则</a>
   				  </td>
   				  </tr>  
   				  
@@ -302,6 +304,8 @@
 	data1 = [];
 	data2 = [];
 	data3 = [];
+	data4 = [];
+	data5 = [];
 	var i = 0;
 	var data;
 	
@@ -435,7 +439,118 @@
 		
 	}
 	
+	function addPayModeTypeRule() {
+		
+	 	var condition1 = document.getElementsByName("condition1_paymode")[0].value;
+		var point1 = document.getElementsByName("point1_paymode")[0].value; 
+		data = $('#datalist1_paymode').datalist("getData");
+		var flag = check2(condition1,point1,data);
+		if(!flag){
+			return;
+		}
+		
+		
+		var i = data.total + 1;
+		
+		//var strDisplay = "";
+		var strDisplay =  "如果车辆是" + $('#condition1_paymode').combobox("getText");
+		
+		strDisplay += "时，记" + $('#point1_paymode').numberbox("getValue") + "分";
+		
+		data4.push({"id":i,"text":strDisplay,"condition1":condition1,"value1":0,"condition2":"","value2":0,"point1":point1});
+		$('#datalist1_paymode').datalist("loadData",data4);
+		
+	}
 	
+	function delPayModeTypeRule() {
+		var tmpArr = new Array();
+		var delArr = $('#datalist1_paymode').datalist("getChecked");
+		for(var i=0;i < data4.length;i++){
+			if(!delArr.includes(data4[i])){
+				tmpArr.push(data4[i]);
+			}
+		}
+		data4 = tmpArr.slice();
+		$('#datalist1_paymode').datalist("loadData",data4);
+		
+	}
+	
+	function addPayModeTypeRule() {
+		
+	 	var condition1 = document.getElementsByName("condition1_paymode")[0].value;
+		var point1 = document.getElementsByName("point1_paymode")[0].value; 
+		data = $('#datalist1_paymode').datalist("getData");
+		var flag = check2(condition1,point1,data);
+		if(!flag){
+			return;
+		}
+		
+		
+		var i = data.total + 1;
+		
+		//var strDisplay = "";
+		var strDisplay =  "如果车辆是" + $('#condition1_paymode').combobox("getText");
+		
+		strDisplay += "时，记" + $('#point1_paymode').numberbox("getValue") + "分";
+		
+		data4.push({"id":i,"text":strDisplay,"condition1":condition1,"value1":0,"condition2":"","value2":0,"point1":point1});
+		$('#datalist1_paymode').datalist("loadData",data4);
+		
+	}
+	
+	function delPayModeTypeRule() {
+		var tmpArr = new Array();
+		var delArr = $('#datalist1_paymode').datalist("getChecked");
+		for(var i=0;i < data4.length;i++){
+			if(!delArr.includes(data4[i])){
+				tmpArr.push(data4[i]);
+			}
+		}
+		data4 = tmpArr.slice();
+		$('#datalist1_paymode').datalist("loadData",data4);
+		
+	}
+	
+	
+function addSecondHandTypeRule() {
+		
+	 	var value1 = document.getElementsByName("value1_secondhand")[0].value;
+	 	var value2 = document.getElementsByName("value2_secondhand")[0].value;
+		data = $('#datalist1_secondhand').datalist("getData");
+		
+		var dataArray = data.rows;
+		if(dataArray.length == 1){
+			alert("新增条件与已有条件存在冲突，无法添加");
+			return;	
+		}
+		
+		
+		
+		
+		var i = data.total + 1;
+		
+		//var strDisplay = "";
+		var strDisplay =  "如果收购二手车辆品牌是保时捷时，每台记" + $('#value1_secondhand').numberbox("getValue") ;
+		
+		strDisplay += "分，收购其他品牌二手车1台或以上，记" + $('#value2_secondhand').numberbox("getValue") + "分";
+		
+		data5.push({"id":i,"text":strDisplay,"condition1":"","value1":value1,"condition2":"","value2":value2,"point1":0});
+		$('#datalist1_secondhand').datalist("loadData",data5);
+		
+	}
+	
+	function delSecondHandTypeRule() {
+		var tmpArr = new Array();
+		var delArr = $('#datalist1_secondhand').datalist("getChecked");
+		for(var i=0;i < data5.length;i++){
+			if(!delArr.includes(data5[i])){
+				tmpArr.push(data5[i]);
+			}
+		}
+		data5 = tmpArr.slice();
+		$('#datalist1_secondhand').datalist("loadData",data5);
+		
+	}
 	
 	function check1(c1,v1,c2,v2,p1,data) {
 		var condition1 = c1;
@@ -625,22 +740,49 @@
 			
 		}
 		
-			
-			
-		
-		
 		alert("正确");
 		return true;
 		
 		
 	}
 
-	function check2() {
-		var clientName = document.getElementsByName("clientName")[0].value;
-		if (clientName == "") {
-			alert("客户姓名不能为空！");
+	function check2(c1,p1,data) {
+		var condition1 = c1;
+		var point1Str = p1;
+		var point1 = parseInt(point1Str);
+		
+		if(condition1 == "0"){
+			alert("条件1 必须输入");
 			return false;
 		}
+		
+		if(point1Str == ""){
+			alert("计分不能为空，请输入计分");
+			return false;
+		}
+		
+				
+		var dataArray = data.rows;
+		
+		if(dataArray.length > 0){
+			for(var i=0 ; i<dataArray.length ; i++){
+				var row = dataArray[i];
+				var list_condition1 = row.condition1;
+				
+				if(list_condition1 == condition1) {
+					alert("新增条件与已有条件存在冲突，无法添加");
+					return false;
+					
+				}
+				
+			}
+			
+		}
+		
+		alert("正确");
+		return true;
+		
+		
 	}
 	
 	function check3() {
