@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="leon.sms.mapper.RulesMapper">
+
+	<insert id="add" parameterType="leon.sms.pojo.Rules">
+		insert into rules
+		(cartype,ruletype,condition1,value1,condition2,value2,points,text)
+		values
+		(#{cartype},#{ruletype},#{condition1},#{value1},#{condition2},#{value2},#{points},#{text})
+	</insert>
+
+
+
+	<delete id="deleteRulesByCarType" parameterType="String">
+		delete from
+		rules where cartype = #{cartype}
+	</delete>
+	
+	
+	<select id="getRulesByCarType" parameterType="Map" resultType="leon.sms.pojo.Rules">
+		select id, cartype, ruletype, condition1, value1, condition2, value2, points,text from rules where 1 = 1 
+
+	     <if test='cartype != null'>
+			and cartype = #{cartype}
+		</if> 
+		 
+	</select>
+	
+	<select id="list" resultType="leon.sms.pojo.Rules">
+		select * from rules
+	</select>
+</mapper>
+     

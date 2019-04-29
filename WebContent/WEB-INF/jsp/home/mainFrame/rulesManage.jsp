@@ -21,12 +21,12 @@
 </head>
 <body onload='init()'>
 	<div class="box">
-		<form action="updateRules" method="post" accept-charset="utf-8" >
+		<form id="ruleForm" action="ruleRedirect" method="post" accept-charset="utf-8" >
 			<fieldset>
 				<div align="center">
 					<input id="modelId" name="modelId" class="easyui-combobox" 
 				data-options="
-							value: '---请选择销售车型---', 
+							<!-- value: '---请选择销售车型---', --> 
     						valueField: 'id',
   						    textField: 'text',
    					        url: 'getCarsByBrandId?brand_id=189'
@@ -62,7 +62,7 @@
     
 				</select>
 			    <input id="value2" name="value2" class="easyui-numberspinner" data-options="min:0,max:100" style="width:80px;"></input>辆时，记
-			    <input id="point1" class="easyui-numberbox" name="point1" style="width:50px;" data-options="min:-100,max:100">分
+			    <input id="points" class="easyui-numberbox" name="points" style="width:50px;" data-options="min:-100,max:100">分
     		</td>
     		<td>
     		<a href="javascript:void(0);" onclick="addCarTypeRule()" class="btn btn-default">增加规则</a>
@@ -119,7 +119,7 @@
     
 				</select>
 			    <input id="value2_acc" name="value2_acc" class="easyui-numberspinner" data-options="min:0,max:50000" style="width:80px;"></input>元时，记
-			    <input id="point1_acc" name="point1_acc" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
+			    <input id="points_acc" name="points_acc" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
     		</td>
     		<td>
     		<a href="javascript:void(0);" onclick="addAccessoryTypeRule()"  class="btn btn-default">增加规则</a>
@@ -178,7 +178,7 @@
     
 				</select>
 			    <input id="value2_notacc" name="value2_notacc" class="easyui-numberspinner" data-options="min:0,max:50000" style="width:80px;"></input>元时，记
-			    <input id="point1_notacc" name="point1_notacc" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
+			    <input id="points_notacc" name="points_notacc" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
     		</td>
     		<td>
     		<a href="javascript:void(0);" onclick="addNotAccessoryTypeRule()"  class="btn btn-default">增加规则</a>
@@ -222,7 +222,7 @@
     
 				</select>
 				时，记
-			    <input id="point1_paymode" name="point1_paymode" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
+			    <input id="points_paymode" name="points_paymode" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
     		</td>
     		<td>
     		<a href="javascript:void(0);" onclick="addPayModeTypeRule()"  class="btn btn-default">增加规则</a>
@@ -289,7 +289,7 @@
 	</table>
 	
 				</div>
-				<div align="center"><button type="submit" class="btn">提交</button></div>
+				<div align="center"><button type="submit" class="btn" onsubmit="updateRules()" >提交</button></div>
 			</fieldset>  
 		</form>
 	</div>
@@ -306,8 +306,10 @@
 	data3 = [];
 	data4 = [];
 	data5 = [];
+	var allRulesArr = [];
 	var i = 0;
 	var data;
+	var selectedCarType;
 	
 	function addCarTypeRule() {
 		
@@ -315,9 +317,9 @@
 		var value1 = document.getElementsByName("value1")[0].value;
 		var condition2 = document.getElementsByName("condition2")[0].value;
 		var value2 = document.getElementsByName("value2")[0].value;
-		var point1 = document.getElementsByName("point1")[0].value; 
+		var points = document.getElementsByName("points")[0].value; 
 		data = $('#datalist1').datalist("getData");
-		var flag = check1(condition1,value1,condition2,value2,point1,data);
+		var flag = check1(condition1,value1,condition2,value2,points,data);
 		if(!flag){
 			return;
 		}
@@ -332,9 +334,9 @@
 			strDisplay +=  "且" + $('#condition2').combobox("getText") + $('#value2').numberspinner('getValue') + "辆";
 		}
 		
-		strDisplay += "时，记" + $('#point1').numberbox("getValue") + "分";
+		strDisplay += "时，记" + $('#points').numberbox("getValue") + "分";
 		
-		data1.push({"id":i,"text":strDisplay,"condition1":condition1,"value1":value1,"condition2":condition2,"value2":value2,"point1":point1});
+		data1.push({"id":i,"text":strDisplay,"cartype": selectedCarType,"ruletype":"carTypeRule","condition1":condition1,"value1":value1,"condition2":condition2,"value2":value2,"points":points});
 		$('#datalist1').datalist("loadData",data1);
 		
 	}
@@ -358,9 +360,9 @@
 		var value1 = document.getElementsByName("value1_acc")[0].value;
 		var condition2 = document.getElementsByName("condition2_acc")[0].value;
 		var value2 = document.getElementsByName("value2_acc")[0].value;
-		var point1 = document.getElementsByName("point1_acc")[0].value; 
+		var points = document.getElementsByName("points_acc")[0].value; 
 		data = $('#datalist1_acc').datalist("getData");
-		var flag = check1(condition1,value1,condition2,value2,point1,data);
+		var flag = check1(condition1,value1,condition2,value2,points,data);
 		if(!flag){
 			return;
 		}
@@ -375,9 +377,9 @@
 			strDisplay +=  "且" + $('#condition2_acc').combobox("getText") + $('#value2_acc').numberspinner('getValue') + "元";
 		}
 		
-		strDisplay += "时，记" + $('#point1_acc').numberbox("getValue") + "分";
+		strDisplay += "时，记" + $('#points_acc').numberbox("getValue") + "分";
 		
-		data2.push({"id":i,"text":strDisplay,"condition1":condition1,"value1":value1,"condition2":condition2,"value2":value2,"point1":point1});
+		data2.push({"id":i,"text":strDisplay,"cartype": selectedCarType,"ruletype":"AccessoryTypeRule","condition1":condition1,"value1":value1,"condition2":condition2,"value2":value2,"points":points});
 		$('#datalist1_acc').datalist("loadData",data2);
 		
 	}
@@ -402,9 +404,9 @@
 		var value1 = document.getElementsByName("value1_notacc")[0].value;
 		var condition2 = document.getElementsByName("condition2_notacc")[0].value;
 		var value2 = document.getElementsByName("value2_notacc")[0].value;
-		var point1 = document.getElementsByName("point1_notacc")[0].value; 
+		var points = document.getElementsByName("points_notacc")[0].value; 
 		data = $('#datalist1_notacc').datalist("getData");
-		var flag = check1(condition1,value1,condition2,value2,point1,data);
+		var flag = check1(condition1,value1,condition2,value2,points,data);
 		if(!flag){
 			return;
 		}
@@ -419,9 +421,9 @@
 			strDisplay +=  "且" + $('#condition2_notacc').combobox("getText") + $('#value2_notacc').numberspinner('getValue') + "元";
 		}
 		
-		strDisplay += "时，记" + $('#point1_notacc').numberbox("getValue") + "分";
+		strDisplay += "时，记" + $('#points_notacc').numberbox("getValue") + "分";
 		
-		data3.push({"id":i,"text":strDisplay,"condition1":condition1,"value1":value1,"condition2":condition2,"value2":value2,"point1":point1});
+		data3.push({"id":i,"text":strDisplay,"cartype": selectedCarType,"ruletype":"NotAccessoryTypeRule","condition1":condition1,"value1":value1,"condition2":condition2,"value2":value2,"points":points});
 		$('#datalist1_notacc').datalist("loadData",data3);
 		
 	}
@@ -442,9 +444,9 @@
 	function addPayModeTypeRule() {
 		
 	 	var condition1 = document.getElementsByName("condition1_paymode")[0].value;
-		var point1 = document.getElementsByName("point1_paymode")[0].value; 
+		var points = document.getElementsByName("points_paymode")[0].value; 
 		data = $('#datalist1_paymode').datalist("getData");
-		var flag = check2(condition1,point1,data);
+		var flag = check2(condition1,points,data);
 		if(!flag){
 			return;
 		}
@@ -455,45 +457,9 @@
 		//var strDisplay = "";
 		var strDisplay =  "如果车辆是" + $('#condition1_paymode').combobox("getText");
 		
-		strDisplay += "时，记" + $('#point1_paymode').numberbox("getValue") + "分";
+		strDisplay += "时，记" + $('#points_paymode').numberbox("getValue") + "分";
 		
-		data4.push({"id":i,"text":strDisplay,"condition1":condition1,"value1":0,"condition2":"","value2":0,"point1":point1});
-		$('#datalist1_paymode').datalist("loadData",data4);
-		
-	}
-	
-	function delPayModeTypeRule() {
-		var tmpArr = new Array();
-		var delArr = $('#datalist1_paymode').datalist("getChecked");
-		for(var i=0;i < data4.length;i++){
-			if(!delArr.includes(data4[i])){
-				tmpArr.push(data4[i]);
-			}
-		}
-		data4 = tmpArr.slice();
-		$('#datalist1_paymode').datalist("loadData",data4);
-		
-	}
-	
-	function addPayModeTypeRule() {
-		
-	 	var condition1 = document.getElementsByName("condition1_paymode")[0].value;
-		var point1 = document.getElementsByName("point1_paymode")[0].value; 
-		data = $('#datalist1_paymode').datalist("getData");
-		var flag = check2(condition1,point1,data);
-		if(!flag){
-			return;
-		}
-		
-		
-		var i = data.total + 1;
-		
-		//var strDisplay = "";
-		var strDisplay =  "如果车辆是" + $('#condition1_paymode').combobox("getText");
-		
-		strDisplay += "时，记" + $('#point1_paymode').numberbox("getValue") + "分";
-		
-		data4.push({"id":i,"text":strDisplay,"condition1":condition1,"value1":0,"condition2":"","value2":0,"point1":point1});
+		data4.push({"id":i,"text":strDisplay,"cartype": selectedCarType,"ruletype":"PayModeTypeRule","condition1":condition1,"value1":0,"condition2":"","value2":0,"points":points});
 		$('#datalist1_paymode').datalist("loadData",data4);
 		
 	}
@@ -512,7 +478,8 @@
 	}
 	
 	
-function addSecondHandTypeRule() {
+	
+	function addSecondHandTypeRule() {
 		
 	 	var value1 = document.getElementsByName("value1_secondhand")[0].value;
 	 	var value2 = document.getElementsByName("value2_secondhand")[0].value;
@@ -534,7 +501,7 @@ function addSecondHandTypeRule() {
 		
 		strDisplay += "分，收购其他品牌二手车1台或以上，记" + $('#value2_secondhand').numberbox("getValue") + "分";
 		
-		data5.push({"id":i,"text":strDisplay,"condition1":"","value1":value1,"condition2":"","value2":value2,"point1":0});
+		data5.push({"id":i,"text":strDisplay,"cartype": selectedCarType,"ruletype":"SecondHandTypeRule","condition1":"","value1":value1,"condition2":"","value2":value2,"points":0});
 		$('#datalist1_secondhand').datalist("loadData",data5);
 		
 	}
@@ -557,10 +524,10 @@ function addSecondHandTypeRule() {
 		var value1Str = v1;
 		var condition2 = c2;
 		var value2Str = v2;
-		var point1Str = p1;
+		var pointsStr = p1;
 		var value1 = parseInt(value1Str);
 		var value2 = parseInt(value2Str);
-		var point1 = parseInt(point1Str);
+		var points = parseInt(pointsStr);
 		
 		if(condition1 == "0" || (value1Str == "")){
 			alert("条件1 和 值1 必须输入");
@@ -574,7 +541,7 @@ function addSecondHandTypeRule() {
 			return false;
 		} 
 		
-		if(point1Str == ""){
+		if(pointsStr == ""){
 			alert("计分不能为空，请输入计分");
 			return false;
 		}
@@ -740,7 +707,7 @@ function addSecondHandTypeRule() {
 			
 		}
 		
-		alert("正确");
+		//alert("正确");
 		return true;
 		
 		
@@ -748,15 +715,15 @@ function addSecondHandTypeRule() {
 
 	function check2(c1,p1,data) {
 		var condition1 = c1;
-		var point1Str = p1;
-		var point1 = parseInt(point1Str);
+		var pointsStr = p1;
+		var points = parseInt(pointsStr);
 		
 		if(condition1 == "0"){
 			alert("条件1 必须输入");
 			return false;
 		}
 		
-		if(point1Str == ""){
+		if(pointsStr == ""){
 			alert("计分不能为空，请输入计分");
 			return false;
 		}
@@ -779,7 +746,7 @@ function addSecondHandTypeRule() {
 			
 		}
 		
-		alert("正确");
+		//alert("正确");
 		return true;
 		
 		
@@ -797,21 +764,208 @@ function addSecondHandTypeRule() {
 		}
 	}
 	
-	function init(){
-			
+	
+	function updateRules(){
 		
-		$(function(){
-		    $('#modelId').combobox({
-		        onChange:function(n,o){
-		            //alert('hello');
-		            window.location.reload();
-		        }
-		    });
+		data = $('#datalist1').datalist("getData");
+		var dataArr = data.rows;
+		
+		if(dataArr.length > 0){
+			
+			for(var i=0 ; i<dataArr.length ; i++){
+				allRulesArr.push(dataArr[i]);
+			}
+			
+		}
+		
+		data = $('#datalist1_acc').datalist("getData");
+		var dataArr = data.rows;
+		
+		if(dataArr.length > 0){
+			
+			for(var i=0 ; i<dataArr.length ; i++){
+				allRulesArr.push(dataArr[i]);
+			}
+			
+		}
+		
+		data = $('#datalist1_notacc').datalist("getData");
+		var dataArr = data.rows;
+		
+		if(dataArr.length > 0){
+			
+			for(var i=0 ; i<dataArr.length ; i++){
+				allRulesArr.push(dataArr[i]);
+			}
+			
+		}
+		
+		data = $('#datalist1_paymode').datalist("getData");
+		var dataArr = data.rows;
+		
+		if(dataArr.length > 0){
+			
+			for(var i=0 ; i<dataArr.length ; i++){
+				allRulesArr.push(dataArr[i]);
+			}
+			
+		}
+		
+		data = $('#datalist1_secondhand').datalist("getData");
+		
+		var dataArr = data.rows;
+		
+		if(dataArr.length > 0){
+			
+			for(var i=0 ; i<dataArr.length ; i++){
+				allRulesArr.push(dataArr[i]);
+			}
+			
+		}
+		
+		//alert(allRulesArr);
+		
+		$.ajax({
+		    type:'POST',
+		    url:'updateRules',
+		    data:JSON.stringify(allRulesArr),
+		    dataType:'json',
+		    contentType:"application/json",
+		    beforeSend: function () {
+		      　　$.messager.progress({ 
+		         　　title: '提示', 
+		         　　msg: '数据加载中，请稍候……', 
+		         　　text: '' 
+		      　　});
+		      },
+		      complete: function () {
+		           $.messager.progress('close');
+		      },
+		      success:function(data){
+		    	  
+		    	  alert('保存成功！');
+		      }
+			
 		});
 		
-
-		
+	}
 	
+	function init(){
+		
+		//var carRulesArr = new Array();
+		//$('#modelId').combobox('select',3364);
+		<%
+			String modelId = (String)request.getParameter("modelId");
+			if(modelId == null){
+				modelId = "";
+			}
+		%>
+		  var modelId = '<%=modelId %>';
+		  
+		  //alert(modelId);
+		  $(function(){
+		    $('#modelId').combobox({
+		    	
+		        onChange:function(n,o){
+		        	
+		        	selectedCarType = n;
+		        	
+		        	refreshData(selectedCarType); 
+		        	//显示蒙版
+		        	/*
+		        	　$.messager.progress({ 
+		              　　title: '提示', 
+		              　　msg: '数据加载中，请稍候……', 
+		              　　text: '' 
+		           　　});
+		        	
+		        	alert('test');
+		        	// 结束后消失蒙版
+		        	//$.messager.progress('close');
+		        	
+		        	*/
+		        }
+		        
+		        
+		        
+		    });
+		    
+		    $('#ruleForm').submit(updateRules);
+		    
+		    refreshData(modelId); 
+		    
+		    
+		    
+		});  
+		  
+		 
+		
+	}
+	
+	function refreshData(modelId){
+		
+		if(modelId != null && modelId != '' && modelId != 'null' ){
+     		
+	    	$('#modelId').combobox('select',modelId);
+	    	
+	    	var data_carTypeRule = [];
+	    	var data_AccessoryTypeRule = [];
+	    	var data_NotAccessoryTypeRule = [];
+	    	var data_PayModeTypeRule = [];
+	    	var data_SecondHandTypeRule = [];
+	    	//重新加载数据显示datalist
+	    	$('#datalist1').datalist("loadData",data_carTypeRule);
+	    	$('#datalist1_acc').datalist("loadData",data_AccessoryTypeRule);
+	    	$('#datalist1_notacc').datalist("loadData",data_NotAccessoryTypeRule);
+	    	$('#datalist1_paymode').datalist("loadData",data_PayModeTypeRule);
+	    	$('#datalist1_secondhand').datalist("loadData",data_SecondHandTypeRule);
+	    		
+	    		
+	    		
+	    	//获取modelId对应的全部规则
+	    	var url = 'getRulesByCarType?cartype=' + modelId;
+	    	$.ajax({
+			    type:'GET',
+			    url:url,
+     		    success:function(data){
+     		    	//alert('data!' + JSON.stringify(data));
+     		    	var jsonDataArr = JSON.parse(JSON.stringify(data));
+     		    	//alert(jsonDataArr);
+     		    	
+     		    	if(jsonDataArr.length > 0) {
+     		    		
+     		    		
+     		    		for(var i=0; i < jsonDataArr.length; i++){
+     		    			var tmp_rule = jsonDataArr[i];
+     		    			if(tmp_rule.ruletype == "carTypeRule"){
+     		    				data_carTypeRule.push(tmp_rule);
+     		    			}else if(tmp_rule.ruletype == "AccessoryTypeRule"){
+     		    				data_AccessoryTypeRule.push(tmp_rule);
+     		    			}else if(tmp_rule.ruletype == "NotAccessoryTypeRule"){
+     		    				data_NotAccessoryTypeRule.push(tmp_rule);
+     		    			}else if(tmp_rule.ruletype == "PayModeTypeRule"){
+     		    				data_PayModeTypeRule.push(tmp_rule);
+     		    			}else if(tmp_rule.ruletype == "SecondHandTypeRule"){
+     		    				data_SecondHandTypeRule.push(tmp_rule);
+     		    			}
+     		    			
+     		    		}
+     		    		
+     		    		//重新加载数据显示datalist
+     		    		$('#datalist1').datalist("loadData",data_carTypeRule);
+     		    		$('#datalist1_acc').datalist("loadData",data_AccessoryTypeRule);
+     		    		$('#datalist1_notacc').datalist("loadData",data_NotAccessoryTypeRule);
+     		    		$('#datalist1_paymode').datalist("loadData",data_PayModeTypeRule);
+     		    		$('#datalist1_secondhand').datalist("loadData",data_SecondHandTypeRule);
+     		    		
+     		    	}
+			    
+			    }
+				
+			});
+	    }
+		
+		
 	}
 </script>
 
