@@ -107,6 +107,14 @@ public class HomeController
 		return mav;
 	}
 	
+	@RequestMapping("rank")
+	public ModelAndView rankList()
+	{
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("home/mainFrame/rank");
+		return mav;
+	}
+	
 	@RequestMapping("orders")
 	public ModelAndView inputOrder()
 	{

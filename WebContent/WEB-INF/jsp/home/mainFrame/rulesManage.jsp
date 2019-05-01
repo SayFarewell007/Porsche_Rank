@@ -26,7 +26,8 @@
 				<div align="center">
 					<input id="modelId" name="modelId" class="easyui-combobox" 
 				data-options="
-							<!-- value: '---请选择销售车型---', --> 
+							value: '---请选择销售车型---', 
+							text: 'hehe', 
     						valueField: 'id',
   						    textField: 'text',
    					        url: 'getCarsByBrandId?brand_id=189'
@@ -481,6 +482,13 @@
 	
 	function addSecondHandTypeRule() {
 		
+		
+		var carTypeValue = $('#modelId').combobox('getValue');
+		if(carTypeValue == '---请选择销售车型---'){
+			alert("请先选择要添加/修改规则的车型");
+			return false;
+		}
+		
 	 	var value1 = document.getElementsByName("value1_secondhand")[0].value;
 	 	var value2 = document.getElementsByName("value2_secondhand")[0].value;
 		data = $('#datalist1_secondhand').datalist("getData");
@@ -520,6 +528,12 @@
 	}
 	
 	function check1(c1,v1,c2,v2,p1,data) {
+		
+		var carTypeValue = $('#modelId').combobox('getValue');
+		if(carTypeValue == '---请选择销售车型---'){
+			alert("请先选择要添加/修改规则的车型");
+			return false;
+		}
 		var condition1 = c1;
 		var value1Str = v1;
 		var condition2 = c2;
@@ -714,6 +728,13 @@
 	}
 
 	function check2(c1,p1,data) {
+		
+		var carTypeValue = $('#modelId').combobox('getValue');
+		if(carTypeValue == '---请选择销售车型---'){
+			alert("请先选择要添加/修改规则的车型");
+			return false;
+		}
+		
 		var condition1 = c1;
 		var pointsStr = p1;
 		var points = parseInt(pointsStr);
@@ -752,20 +773,15 @@
 		
 	}
 	
-	function check3() {
-		var ClientName1 = document.getElementsByName("ClientName1")[0].value;
-		var ClientPhone = document.getElementsByName("ClientPhone")[0].value;
-		if (ClientName1 == "") {
-			alert("客户姓名不能为空！");
-			return false;
-		}else if (ClientPhone == "") {
-			alert("号码不能为空！");
-			return false;
-		}
-	}
-	
 	
 	function updateRules(){
+		
+		
+		var carTypeValue = $('#modelId').combobox('getValue');
+		if(carTypeValue == '---请选择销售车型---'){
+			alert("请先选择要添加/修改规则的车型");
+			return false;
+		}
 		
 		data = $('#datalist1').datalist("getData");
 		var dataArr = data.rows;
@@ -904,7 +920,7 @@
 	
 	function refreshData(modelId){
 		
-		if(modelId != null && modelId != '' && modelId != 'null' ){
+		if(modelId != null && modelId != '' && modelId != '---请选择销售车型---' && modelId != 'null' ){
      		
 	    	$('#modelId').combobox('select',modelId);
 	    	
@@ -927,8 +943,19 @@
 	    	$.ajax({
 			    type:'GET',
 			    url:url,
+			    beforeSend: function () {
+			      　　$.messager.progress({ 
+			         　　title: '提示', 
+			         　　msg: '数据加载中，请稍候……', 
+			         　　text: '' 
+			      　　});
+			      },
+			    complete: function () {
+			           $.messager.progress('close');
+			      },
+			      
      		    success:function(data){
-     		    	//alert('data!' + JSON.stringify(data));
+     		    	// alert('data!' + JSON.stringify(data));
      		    	var jsonDataArr = JSON.parse(JSON.stringify(data));
      		    	//alert(jsonDataArr);
      		    	

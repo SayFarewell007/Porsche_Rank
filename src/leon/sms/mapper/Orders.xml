@@ -6,9 +6,9 @@
 <mapper namespace="leon.sms.mapper.OrdersMapper">
 	<insert id="add" parameterType="leon.sms.pojo.Orders">
 		insert into orders
-		(name,model,accessory,notAccessory,payMode,secondHandCarType,secondHandCarDetail,tranDate,inputDate,modDate)
+		(name,model,modelId, accessory,notAccessory,payMode,secondHandCarType,secondHandCarTypeId,secondHandCarDetail,secondHandCarDetailId,tranDate,inputDate,modDate)
 		values
-		(#{name},#{model},#{accessory},#{notAccessory},#{payMode},#{secondHandCarType},#{secondHandCarDetail},#{tranDate},#{inputDate},#{modDate})
+		(#{name},#{model},#{modelId},#{accessory},#{notAccessory},#{payMode},#{secondHandCarType},#{secondHandCarTypeId},#{secondHandCarDetail},#{secondHandCarDetailId},#{tranDate},#{inputDate},#{modDate})
 	</insert>
 
 	<delete id="delete" parameterType="int">
@@ -23,7 +23,7 @@
 	
 	
 	<select id="getAllOrders" parameterType="Map" resultType="leon.sms.pojo.Orders">
-		select id, name, model, model as modelId, accessory, notAccessory, payMode, secondHandCarType, secondHandCarType as secondHandCarTypeId,secondHandCarDetail, secondHandCarDetail as secondHandCarDetailId, tranDate, inputDate, modDate from orders where 1 = 1 
+		select id, name, model, modelId, accessory, notAccessory, payMode, secondHandCarType, secondHandCarTypeId,secondHandCarDetail, secondHandCarDetailId, tranDate, inputDate, modDate from orders where 1 = 1 
 	<!-- 	<if test='beginDate != null and endDate != null'>
 		and tranDate >= #{beginDate} and tranDate <= #{endDate}
 		</if> -->
@@ -43,11 +43,14 @@
 		update orders set
 		name=#{name},
 		model=#{model},
+		modelId= #{modelId},
 		accessory=#{accessory},
 		notAccessory=#{notAccessory},
 		payMode=#{payMode},
 		secondHandCarType=#{secondHandCarType},
+		secondHandCarTypeId=#{secondHandCarTypeId},
 		secondHandCarDetail=#{secondHandCarDetail},
+		secondHandCarDetailId=#{secondHandCarDetailId},
 		tranDate = STR_TO_DATE(#{tranDate},'%Y-%m-%d'),
 		modDate = STR_TO_DATE(#{modDate},'%Y-%m-%d')
 		where id = #{id}

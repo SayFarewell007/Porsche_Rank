@@ -43,7 +43,11 @@ public class OrdersService
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String inputDate = dateFormat.format(new Date());
 		String modDate = null;
-		Orders orders = new Orders(name, model, modelId, accessory, notAccessory, payMode, secondHandCarType, secondHandCarTypeId, secondHandCarDetail, secondHandCarDetailId, tranDate, inputDate, modDate);
+		
+		String carModelName = carsMapper.getCarTypeNameById(modelId);
+		String secondHandBrand = carsMapper.getCarBrandNameById(secondHandCarTypeId);
+		String secondHandCarTypeName = carsMapper.getCarTypeNameById(secondHandCarDetailId);
+		Orders orders = new Orders(name, carModelName, modelId, accessory, notAccessory, payMode, secondHandBrand, secondHandCarTypeId, secondHandCarTypeName, secondHandCarDetailId, tranDate, inputDate, modDate);
 		
 		ordersMapper.add(orders);
 		
@@ -55,8 +59,13 @@ public class OrdersService
 	{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String modDate = dateFormat.format(new Date());
-		Orders orders = new Orders(id, name, model, modelId, accessory, notAccessory, payMode, secondHandCarType, secondHandCarTypeId, secondHandCarDetail, secondHandCarDetailId, tranDate, tranDate, modDate);
 		
+		String carTypeName = carsMapper.getCarTypeNameById(modelId);
+		String secondBrandName = carsMapper.getCarBrandNameById(secondHandCarTypeId);
+		String secondCarTypeName = carsMapper.getCarTypeNameById(secondHandCarDetailId);
+		System.out.println("before new order:" + secondCarTypeName);
+		Orders orders = new Orders(id, name, carTypeName, modelId, accessory, notAccessory, payMode, secondBrandName, secondHandCarTypeId, secondCarTypeName, secondHandCarDetailId, tranDate, tranDate, modDate);
+		System.out.println("update===" + orders);
 		ordersMapper.update(orders);
 		
 	}

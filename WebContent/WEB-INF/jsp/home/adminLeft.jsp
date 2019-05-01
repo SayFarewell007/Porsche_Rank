@@ -33,21 +33,29 @@ body{
 <body>
 	<div style="padding: 10px;padding-left">
 		<ul class="nav nav-pills nav-stacked">
-			<li id="li1" onclick="changeStyle('li1')" class="active"><a
-				target="mainFrame" href="homeMain">企业文化</a></li>
+			
+			<li id="li2" onclick="changeStyle('li2')"><a target="mainFrame"
+				href="rank">销售排行榜</a></li>
+			<li id="li5" onclick="changeStyle('li5')"><a target="mainFrame"
+				href="orders">销售入单</a></li>
+			<li id="li6" onclick="changeStyle('li6')"><a target="mainFrame"
+				href="ordersManage?beginDate=&endDate=&name=">管理订单</a></li>
+			<li id="li7" onclick="changeStyle('li7')"><a target="mainFrame"
+				href="rulesManage">考核规则管理</a></li>
+			<!-- 
 			<li id="li2" onclick="changeStyle('li2')"><a target="mainFrame"
 				href="analysis">整体统计分析</a></li>
 			<li id="li3" onclick="changeStyle('li3')"><a target="mainFrame"
 				href="adminDocumentary">销售经理跟单</a></li>
-			<li id="li6" onclick="changeStyle('li6')"><a target="mainFrame"
-				href="ordersManage?beginDate=&endDate=&name=">管理订单</a></li>
+			
 			<li id="li4" onclick="changeStyle('li4')"><a target="mainFrame"
 				href="others">其他功能</a></li>
-			<li id="li5" onclick="changeStyle('li5')"><a target="mainFrame"
-				href="orders">入单</a></li>
-			<li id="li7" onclick="changeStyle('li7')"><a target="mainFrame"
-				href="rulesManage">考核规则管理</a></li>
-			<li id="clock" style="font-size: 20px;margin-left: 10px;"></li>
+				
+			<li id="li1" onclick="changeStyle('li1')" class="active"><a
+				target="mainFrame" href="homeMain">企业文化</a></li>
+				
+			 -->		
+			<li id="clock" style="font-size: 16px;margin-left: 10px;"></li>
 		</ul>
 	</div>
 </body>

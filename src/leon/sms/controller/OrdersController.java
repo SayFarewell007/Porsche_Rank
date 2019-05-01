@@ -61,10 +61,10 @@ public class OrdersController
 	
 	@RequestMapping("updateOrder")
 	public String updateOrders(
-								  @RequestParam("id") Integer id,
+								  @RequestParam("id") String id,
 			                      @RequestParam("name") String name,
 								  @RequestParam("model") String model , 
-								  /*@RequestParam("modelId") String modelId , */ 
+								 // @RequestParam("modelId") String modelId ,  
 								  @RequestParam("accessory") String accessory , 
 								  @RequestParam("notAccessory") String notAccessory , 
 								  @RequestParam("payMode") String payMode , 
@@ -75,10 +75,8 @@ public class OrdersController
 								  @RequestParam("tranDate") String tranDate  
 								   )
 	{
-		//ModelAndView mav = new ModelAndView();
-		//mav.setViewName("home/mainFrame/ordersManage");
-		
-		ordersService.updateOrder(id, name, model, model,  accessory, notAccessory, payMode, secondHandCarType, secondHandCarType, secondHandCarDetail, secondHandCarDetail, tranDate);
+		System.out.println("id:" + id + "controller====" + "name:" + name + " model:" +model + "accessory:"+ accessory + "notAccessory:" + notAccessory + "payMode:" + payMode  +"secondHandCarType:" + secondHandCarType + "secondHandCarDetail:" + secondHandCarDetail + "tranDate:" + tranDate);
+		ordersService.updateOrder(Integer.valueOf(id), name, model, model,  accessory, notAccessory, payMode, secondHandCarType, secondHandCarType, secondHandCarDetail, secondHandCarDetail, tranDate);
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("home/mainFrame/ordersManage");

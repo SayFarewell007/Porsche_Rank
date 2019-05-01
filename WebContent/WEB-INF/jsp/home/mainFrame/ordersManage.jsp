@@ -36,14 +36,17 @@
 		</tr>
 		<c:forEach items="${list}" var="c" varStatus="st">
 			<tr>
-				<td style="display:none;">${c.id}</td>
-				<td>${c.tranDate}</td>
+				<td style="display:none;">${c.id}</td>   
+				<td>${c.tranDate}</td>					
+				<td style="display:none;">${c.modelId}</td>
 				<td>${c.model}</td>
 				<td>${c.accessory}</td>
 				<td>${c.notAccessory}</td>
-				<%-- <td>${c.payMode}</td> --%>
+				<td style="display:none;">${c.payMode}</td>
 				<td><c:if test="${c.payMode =='1'}">先付后贷车辆</c:if><c:if test="${c.payMode =='2'}">正常贷款车辆</c:if><c:if test="${c.payMode =='3'}">一次性车辆</c:if><c:if test="${c.payMode =='0'}"></c:if></td>
+				<td style="display:none;">${c.secondHandCarTypeId}</td>
 				<td>${c.secondHandCarType}</td>
+				<td style="display:none;">${c.secondHandCarDetailId}</td>
 				<td>${c.secondHandCarDetail}</td>
 				<td>${c.name}</td>
 				<td>${c.inputDate}</td>
@@ -66,12 +69,11 @@
 					<h4 class="modal-title" id="myModalLabel">修改订单信息</h4>
 				</div>
 				
-				<form action="updateOrder" method="post" accept-charset="utf-8">
+				<form action="updateOrder" method="post" accept-charset="utf-8" onsubmit="return check1()">
 					<input type="hidden" name="id" value="">
-					
 					<label class="col-md-4 control-label" style="width:130px">销售日期：</label>
 					<div class="col-md-8" style="float: left">
-						<input id="carTranDate" name="tranDate" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser " ></input>
+						<input id="carTranDate" name="tranDate" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser,editable: false " ></input>
 						<!-- <input type="text" class="form-control" name="tranDate" value=""
 							placeholder="#"> -->
 					</div>
@@ -85,6 +87,7 @@
 							value: '---请选择销售车型---', 
     						valueField: 'id',
   						    textField: 'text',
+  						    editable: false,
    					        url: 'getCarsByBrandId?brand_id=189'
     					    " >
     					    <!--  <input type="text" class="form-control" name="model" value=""
@@ -111,7 +114,7 @@
 					
 					<label class="col-md-4 control-label" style="width:130px;float:left;">付款方式：</label>
 					<div class="col-md-8" style="float: left">
-						<select id="carPayMode" name="payMode" class="easyui-combobox" style="width:200px;">
+						<select id="carPayMode" name="payMode" class="easyui-combobox" style="width:200px;" data-options="editable: false " data-options="editable: false " >
 					 		<option value="0" selected>---请选择付款方式---</option>
     		     			 <option value="1">先付后贷车辆</option>
    							 <option value="2">正常贷款车辆</option>
@@ -132,11 +135,13 @@
     						valueField: 'id',
   						    textField: 'name',
    					        url: 'getCarsBrands',
+   					        editable: false,
     					    onSelect: function(rec){
  						    var url = 'getCarsByBrandId?brand_id='+rec.id;
- 						    $('#carSecondHandCarDetail').attr('value','666');
+ 						    $('#carSecondHandCarDetail').combobox('setValue', '---请选择车型---');
  						    $('#carSecondHandCarDetail').combobox('reload', url);
- 						      
+ 						     
+ 						    
   							  }">
 							
 							
@@ -148,7 +153,7 @@
 						<!-- <input type="text" class="form-control" name="secondHandCarDetail" value=""
 							placeholder="#"> -->
 							
-							<input id="carSecondHandCarDetail" name="secondHandCarDetail" class="easyui-combobox" data-options="valueField:'id',textField:'text',value: '---请选择车型---' ">
+							<input id="carSecondHandCarDetail" name="secondHandCarDetail" class="easyui-combobox" data-options="valueField:'id',textField:'text',editable: false, value: '---请选择车型---' ">
 					</div>
 					<br><br>
 					
@@ -161,7 +166,9 @@
 
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="submit" class="btn btn-primary">提交更改</button>
+						<button type="submit" class="btn btn-primary" >提交更改</button>
+		
+
 					</div>
 				</form>
 			</div>
@@ -174,88 +181,87 @@
 			
 			var modal = $(this); //当前模态框  
 			var modalId = btnThis.data('id'); //解析出data-id的内容  
+			
+			
+			// 0:id
 			var content = btnThis.closest('tr').find('td').eq(0).text();
+			alert("id:"+ content);
 			modal.find('input[name="id"]').val(content);
+			// 1:tranDate
 			var content = btnThis.closest('tr').find('td').eq(1).text();
 			modal.find('input[name="tranDate"]').val(content);
 			$("#carTranDate").datebox("setValue",myformatter(new Date(content.replace(/-/g,"/"))));
+			// 2: modelId
 			var content = btnThis.closest('tr').find('td').eq(2).text();
 			//modal.find('input[name="model"]').val(content);
 			//console.log(modal.find('input[name="model"]'));
-			$('#carModel').combobox('select', content);
+			$('#carModel').combobox('setValue', content);
 			
-			var content = btnThis.closest('tr').find('td').eq(3).text();
+			var content = btnThis.closest('tr').find('td').eq(4).text();
 			
 			$('#carAccessory').numberbox('setValue',content);
 			
-			var content = btnThis.closest('tr').find('td').eq(4).text();
+			var content = btnThis.closest('tr').find('td').eq(5).text();
 	
 			$('#carNotAccessory').numberbox('setValue',content);
 			
-			var content = btnThis.closest('tr').find('td').eq(5).text();
+			var content = btnThis.closest('tr').find('td').eq(6).text();
 			
 			$('#carPayMode').combobox('select', content);
 			
-			var content = btnThis.closest('tr').find('td').eq(6).text();
+			var content = btnThis.closest('tr').find('td').eq(8).text();
 			
 			$('#carSecondHandCarType').combobox('setValue', content);
 			
 			modal.find('input[name="secondHandCarType"]').val(content);
-			var content = btnThis.closest('tr').find('td').eq(7).text();
+			var content = btnThis.closest('tr').find('td').eq(10).text();
 			$('#carSecondHandCarDetail').combobox('setValue', content);
 			
 			modal.find('input[name="secondHandCarDetail"]').val(content);
-			var content = btnThis.closest('tr').find('td').eq(8).text();
+			var content = btnThis.closest('tr').find('td').eq(12).text();
 			modal.find('input[name="name"]').val(content);
-			var content = btnThis.closest('tr').find('td').eq(9).text();
+			//var content = btnThis.closest('tr').find('td').eq(9).text();
 
 			
 		});
+		
+		
+		function check1(){
+			
+			var str = $('#carModel').combobox('getValue');
+			if('---请选择销售车型---' == str || '' == str){
+				alert('请选择销售车型!');
+				return false;
+			}
+			
+			str = $('#carSecondHandCarType').combobox('getValue');
+			if('---请选择品牌---' == str || '' == str){
+				alert('请选择二手品牌!');
+				return false;
+			}
+			
+			str = $('#carSecondHandCarDetail').combobox('getValue');
+			if('---请选择车型---' == str || '' == str){
+				alert('请选择二手车型!');
+				return false;
+			}
+			
+			str = $('#carPayMode').combobox('getValue');
+			if('0' == str || '---请选择付款方式---' == str || '' == str){
+				alert('请选择付款方式!');
+				return false;
+			}
+			
+			str = $("#carTranDate").datebox("getValue");
+			if('0' == str  || '' == str){
+				alert('请输入销售日期!');
+				return false;
+			}
+			
+			return true;
+		}
 	</script>
 
-	<a href="#" class="btn btn-default"
-		style="float: right; margin-right: 60px;" data-toggle="modal"
-		data-target="#myModal1">审批意见</a>
-	<!-- 审批意见（Modal） -->
-	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title" id="myModalLabel">编写审批意见</h4>
-				</div>
-				
-				<form action="addInstruction" method="post" accept-charset="utf-8">
-					<label class="col-md-4 control-label" style="width:114px;float:left;">审批人：</label>
-					<div class="col-md-8" style="float: left">
-						<input type="text" class="form-control" name="adminName" value="${sessionScope.user.name}"
-							placeholder="#"  readonly="readonly">
-					</div>
-					<br><br>
-					
-					<label class="col-md-4 control-label" style="width:114px;float:left;">审批对象：</label>
-					<div class="col-md-8" style="float: left">
-						<input type="text" class="form-control" name="staffName" value=""
-							placeholder="#">
-					</div>
-					<br><br>
-
-					<label class="col-md-4 control-label" style="width:114px;float:left;">审批内容：</label>
-					<div class="col-md-8" style="float: left">
-						<textarea type="text" class="form-control" name="content"
-							value="" placeholder="#" style="height: 200px;"></textarea>
-					</div>
-					<br><br><br><br><br><br><br><br><br><br>
-
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="submit" class="btn btn-primary">提交</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
 
 	<script>
 		$(function() {

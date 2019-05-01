@@ -20,7 +20,7 @@
 </head>
 <body onload='init()'>
 	<div class="box">
-		<form action="addOrder" method="post" accept-charset="utf-8" >
+		<form action="addOrder" method="post" accept-charset="utf-8" onsubmit="return check1()">
 			<fieldset>
 				<div align="center">
 					<h4>————新增订单————</h4>
@@ -30,7 +30,7 @@
   				  <table align='center' width="90%" class="table">
 		<tr>
 
-			<td><label>销售车型</label></td><td><input name="modelId" class="easyui-combobox" 
+			<td><label>销售车型</label></td><td><input id="carModel"  name="modelId" class="easyui-combobox" 
 				data-options="
 							value: '---请选择销售车型---', 
     						valueField: 'id',
@@ -49,7 +49,7 @@
 		</tr>
 		<tr>
 			<td><label>付款方式</label></td>
-			<td><select name="payMode" class="easyui-combobox" style="width:200px;" data-options="editable: false " >
+			<td><select id="carPayMode" name="payMode" class="easyui-combobox" style="width:200px;" data-options="editable: false " >
 					 <option value="0" selected>---请选择付款方式---</option>
     		     	 <option value="1">先付后贷车辆</option>
    					 <option value="2">正常贷款车辆</option>
@@ -81,7 +81,7 @@
 		</tr>	
 		
 		<tr>	
-			<td><label>销售日期</label></td> <td><input name="tranDate" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser " ></input></td>
+			<td><label>销售日期</label></td> <td><input id="carTranDate"  name="tranDate" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser,editable: false " ></input></td>
 		</tr>
 		<tr>
 			<td><label>销售人</label></td> 
@@ -98,6 +98,7 @@
 		</form>
 	</div>
 
+	<!-- 
 	<table align='center' width="90%" class="table">
 		<tr>
 			<td style="display:none;">项目ID</td>
@@ -126,28 +127,47 @@
 			</tr>
 		</c:forEach>
 	</table>
+	
+	 -->
 </body>
 
 <script type="text/javascript">
 
 	var retJson = null;  
 	
-	function check1() {
-		var goodsName = document.getElementsByName("goodsName")[0].value;
-		var goodsNumber = document.getElementsByName("goodsNumber")[0].value;
-		var unitPrice = document.getElementsByName("unitPrice")[0].value;
+	function check1(){
 		
-		
-		if (goodsName == "") {
-			alert("商品名不能为空！");
-			return false;
-		} else if (goodsNumber == "") {
-			alert("储量不能为空！");
-			return false;
-		} else if (unitPrice == "") {
-			alert("单价不能为空！");
+		var str = $('#carModel').combobox('getValue');
+		if('---请选择销售车型---' == str || '' == str){
+			alert('请选择销售车型!');
 			return false;
 		}
+		
+		str = $('#cc1').combobox('getValue');
+		if('---请选择品牌---' == str || '' == str){
+			alert('请选择二手品牌!');
+			return false;
+		}
+		
+		str = $('#cc2').combobox('getValue');
+		if('---请选择车型---' == str || '' == str){
+			alert('请选择二手车型!');
+			return false;
+		}
+		
+		str = $('#carPayMode').combobox('getValue');
+		if('0' == str || '---请选择付款方式---' == str || '' == str){
+			alert('请选择付款方式!');
+			return false;
+		}
+		
+		str = $("#carTranDate").datebox("getValue");
+		if('0' == str  || '' == str){
+			alert('请输入销售日期!');
+			return false;
+		}
+		
+		return true;
 	}
 
 	function check2() {
