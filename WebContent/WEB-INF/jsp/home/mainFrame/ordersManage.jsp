@@ -16,11 +16,11 @@
 </head>
 <body>
 	<div align="center">
-		<h4>———— 经理跟单 ————</h4>
+		<h4>———— 订单管理 ————</h4>
 	</div>
 	
 	<table align='center' width="90%" class="table">
-		<tr>
+		<tr class="panel-header" style="font-weight:bold">
 			<td style="display:none;">项目ID</td>
 			<td>销售日期</td>
 			<td>销售车型</td>

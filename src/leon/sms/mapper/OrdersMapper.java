@@ -3,6 +3,9 @@ package leon.sms.mapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import com.sun.xml.internal.ws.resources.StreamingMessages;
+
 import leon.sms.pojo.Goods;
 import leon.sms.pojo.Orders;
 
@@ -27,5 +30,15 @@ public interface OrdersMapper
 
 	public int count();
 	
+	public ArrayList<String> getAvailableMonths();
+	
 	public ArrayList<Orders> getAllOrders(HashMap<String, String> param);
+	
+	public ArrayList<HashMap<String, String>> getSummaryReport(String yyyymm);
+	
+	public ArrayList<HashMap<String, String>> getModelSalesCount(String yyyymm);
+	public ArrayList<HashMap<String, Object>> getModelTotalAccAndNotAcc(String yyyymm);
+	public ArrayList<HashMap<String, String>> getModelPayModeCount(String yyyymm);
+	public ArrayList<HashMap<String, Object>> getSecondPorscheCount(String yyyymm);
+	public ArrayList<HashMap<String, Object>> getSecondNotPorscheCount(String yyyymm);
 }

@@ -3,6 +3,7 @@ package leon.sms.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ public class RulesService
 	@Autowired
 	RulesMapper rulesMapper;
 	
+	private static Logger logger = Logger.getLogger(RulesService.class);
+	
 	public void addRules(String cartype , String ruletype , String condition1, int value1 , 
 						 String condition2 , int value2 , int points, String text)
 	{
@@ -37,12 +40,13 @@ public class RulesService
 		rules.setText(text);
 		
 		rulesMapper.add(rules);
-		
+		logger.info("新增规则");
 	}
 	
 	public void deleteRulesByCarType(String cartype)
 	{
 		rulesMapper.deleteRulesByCarType(cartype);
+		logger.info("删除规则，cartytpe=" + cartype);
 	}
 	
 	

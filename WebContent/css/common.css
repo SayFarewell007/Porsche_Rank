@@ -37,3 +37,5 @@ h1, h2, h3 {
 .table tr.alter {
 	background-color: #f5fafe;
 }
+
+.txt2 {text-shadow:1px 1px 1px #000; padding:10px 0; color:#FFF; background:#CCC} 

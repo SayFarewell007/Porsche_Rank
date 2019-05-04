@@ -22,6 +22,37 @@
 	</select>
 	
 	
+	<select id="getAvailableMonths" resultType="String">
+		SELECT DISTINCT(SUBSTR(tranDate,1,7)) from orders
+	</select>
+	
+	
+	<!-- 每个车型销量  -->
+	<select id="getModelSalesCount" parameterType="String" resultType="Map">
+		select name, modelId, model ,count(*) as count from orders where substr(tranDate,1,7) = #{yyyymm} group by name, modelId, model
+	</select>
+	
+	<!-- 每个车型总销售精品，非搭售精品金额  -->
+	<select id="getModelTotalAccAndNotAcc" parameterType="String" resultType="Map">
+		select name,  sum(accessory) as totalAccessory, sum(notAccessory) as totalNotAccessory from orders where substr(tranDate,1,7) = #{yyyymm} group by name
+	</select>
+	
+	<!-- 每个车型付款方式统计  -->
+	<select id="getModelPayModeCount" parameterType="String" resultType="Map">
+		select name,  sum(accessory) as totalAccessory, sum(notAccessory) as totalNotAccessory from orders where substr(tranDate,1,7) = #{yyyymm} group by name
+	</select>
+	
+	<!-- 二手保时捷销量  -->
+	<select id="getSecondPorscheCount" parameterType="String" resultType="Map">
+		select name, count(*) as secondHandPorscheCount from orders  where substr(tranDate,1,7) = #{yyyymm} and secondHandCarTypeId = '189' group by name
+	</select>
+	
+	<!-- 二手非保时捷销量  -->
+	<select id="getSecondNotPorscheCount" parameterType="String" resultType="Map">
+		select name, count(*) as secondHandNotPorscheCount from orders  where substr(tranDate,1,7) = #{yyyymm} and secondHandCarTypeId != '189' and secondHandCarTypeId != '104'   group by name
+	</select>
+	
+	<!-- 按姓名，起始日期获取销售订单  -->
 	<select id="getAllOrders" parameterType="Map" resultType="leon.sms.pojo.Orders">
 		select id, name, model, modelId, accessory, notAccessory, payMode, secondHandCarType, secondHandCarTypeId,secondHandCarDetail, secondHandCarDetailId, tranDate, inputDate, modDate from orders where 1 = 1 
 	<!-- 	<if test='beginDate != null and endDate != null'>

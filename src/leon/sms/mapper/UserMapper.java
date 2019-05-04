@@ -7,6 +7,7 @@ package leon.sms.mapper;
 * 
 */
 
+import java.util.ArrayList;
 import java.util.List;
 import leon.sms.pojo.User;
 
@@ -20,7 +21,9 @@ public interface UserMapper
 
 	public void update(User user);
 
-	public List<User> list();
+	public ArrayList<User> list();
 
 	public int count();
+	
+	
 }

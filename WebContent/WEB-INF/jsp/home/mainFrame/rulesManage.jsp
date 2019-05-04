@@ -30,6 +30,7 @@
 							text: 'hehe', 
     						valueField: 'id',
   						    textField: 'text',
+  						    editable: false,
    					        url: 'getCarsByBrandId?brand_id=189'
    					      
     					    " >
@@ -259,7 +260,8 @@
 			
 			如果收购二手车辆品牌是保时捷时，每台记
 			    <input id="value1_secondhand" name="value1_secondhand" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分，收购其他品牌二手车1台或以上，记
-			    <input id="value2_secondhand" name="value2_secondhand" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分。
+			    <input id="value2_secondhand" name="value2_secondhand" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分。如果没有任何二手车收购，记
+			    <input id="value3_secondhand" name="value3_secondhand" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分。
     		</td>
     		<td>
     		<a href="javascript:void(0);" onclick="addSecondHandTypeRule()"  class="btn btn-default">增加规则</a>
@@ -320,6 +322,7 @@
 		var value2 = document.getElementsByName("value2")[0].value;
 		var points = document.getElementsByName("points")[0].value; 
 		data = $('#datalist1').datalist("getData");
+		data1 = data.rows;
 		var flag = check1(condition1,value1,condition2,value2,points,data);
 		if(!flag){
 			return;
@@ -363,6 +366,7 @@
 		var value2 = document.getElementsByName("value2_acc")[0].value;
 		var points = document.getElementsByName("points_acc")[0].value; 
 		data = $('#datalist1_acc').datalist("getData");
+		data2 = data.rows;
 		var flag = check1(condition1,value1,condition2,value2,points,data);
 		if(!flag){
 			return;
@@ -407,6 +411,7 @@
 		var value2 = document.getElementsByName("value2_notacc")[0].value;
 		var points = document.getElementsByName("points_notacc")[0].value; 
 		data = $('#datalist1_notacc').datalist("getData");
+		data3 = data.rows;
 		var flag = check1(condition1,value1,condition2,value2,points,data);
 		if(!flag){
 			return;
@@ -447,6 +452,7 @@
 	 	var condition1 = document.getElementsByName("condition1_paymode")[0].value;
 		var points = document.getElementsByName("points_paymode")[0].value; 
 		data = $('#datalist1_paymode').datalist("getData");
+		data4 = data.rows;
 		var flag = check2(condition1,points,data);
 		if(!flag){
 			return;
@@ -489,12 +495,21 @@
 			return false;
 		}
 		
+		
+		
 	 	var value1 = document.getElementsByName("value1_secondhand")[0].value;
 	 	var value2 = document.getElementsByName("value2_secondhand")[0].value;
+	 	var value3 = document.getElementsByName("value3_secondhand")[0].value;
+	 	
+	 	if(value1 == '' || value2 == '' || value3 == ''){
+	 		alert("请输入二手车为保时捷，非保时捷，无任何二手车的计分");
+			return false;
+	 	}
+	 	
 		data = $('#datalist1_secondhand').datalist("getData");
 		
-		var dataArray = data.rows;
-		if(dataArray.length == 1){
+		data5 = data.rows;
+		if(data5.length == 1){
 			alert("新增条件与已有条件存在冲突，无法添加");
 			return;	
 		}
@@ -507,9 +522,10 @@
 		//var strDisplay = "";
 		var strDisplay =  "如果收购二手车辆品牌是保时捷时，每台记" + $('#value1_secondhand').numberbox("getValue") ;
 		
-		strDisplay += "分，收购其他品牌二手车1台或以上，记" + $('#value2_secondhand').numberbox("getValue") + "分";
+		strDisplay += "分，收购其他品牌二手车1台或以上，记" + $('#value2_secondhand').numberbox("getValue") + "分。";
+		strDisplay += "如果无任何收购，记" + $('#value3_secondhand').numberbox("getValue") + "分。";
 		
-		data5.push({"id":i,"text":strDisplay,"cartype": selectedCarType,"ruletype":"SecondHandTypeRule","condition1":"","value1":value1,"condition2":"","value2":value2,"points":0});
+		data5.push({"id":i,"text":strDisplay,"cartype": selectedCarType,"ruletype":"SecondHandTypeRule","condition1":"","value1":value1,"condition2":"","value2":value2,"points":value3});
 		$('#datalist1_secondhand').datalist("loadData",data5);
 		
 	}
@@ -670,9 +686,10 @@
 								return false;
 							}
 							
-							if(greater_condition == "ge" && list_value1 >= greater_value)
+							if(greater_condition == "ge" && list_value1 >= greater_value){
 								alert("新增条件与已有条件存在冲突，无法添加");
 								return false;
+							}
 						}
 						
 						if(list_condition1 == "lt" && list_value > greater_value){

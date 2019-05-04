@@ -69,7 +69,7 @@
    					        url: 'getCarsBrands',
     					    onSelect: function(rec){
  						    var url = 'getCarsByBrandId?brand_id='+rec.id;
- 						    $('#cc2').attr('value','666');
+ 						    $('#cc2').combobox('setValue', '---请选择车型---');
  						    $('#cc2').combobox('reload', url);
  						    
  						    <!-- $('#cc2').attr('value','---请选择车型---'); -->     

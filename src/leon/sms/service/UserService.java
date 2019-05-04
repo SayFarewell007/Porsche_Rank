@@ -2,6 +2,7 @@ package leon.sms.service;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 /** 
 * @author Leon
 * @date 创建时间：2018年4月5日 下午3:54:51
@@ -11,8 +12,11 @@ import java.security.MessageDigest;
 */
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.sun.org.apache.xerces.internal.util.NamespaceContextWrapper;
 
 import leon.sms.mapper.UserMapper;
 import leon.sms.pojo.User;
@@ -22,6 +26,8 @@ public class UserService
 {
 	@Autowired
 	UserMapper userMapper;
+	
+	private static Logger logger = Logger.getLogger(UserService.class);
 	
 	public User search(User user)
 	{
@@ -43,11 +49,22 @@ public class UserService
 		{
 			//System.out.println("hello");
 			userMapper.add(user);
+			logger.info("新增用户" + user.toString());
 			return true;
 		}
 		return false;
 	}
 
+	public ArrayList<User> list(){
+		
+		System.out.println("调用userservice 的list()");
+		ArrayList<User> list = userMapper.list();
+		if (list.size() > 0 ) {
+			return list;
+		}else {
+			return new ArrayList<>();
+		}
+	}
 	public String getMD5(String str)
 	{
 		try
