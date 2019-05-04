@@ -121,12 +121,12 @@
 	}
 	
 	
-	function getSummaryReport(){
+	function getSummaryReport(yyyymm){
 		
 		//alert('get report' + data.id);
 		//document.getElementById("rankTable").style.display="";//显
 		//获取modelId对应的全部规则
-    	var url = 'getSummaryReport?month=' + '2019-05';
+    	var url = 'getSummaryReport?month=' + yyyymm;
     	  $.ajax({
 		    type:'GET',
 		    async:false, 
@@ -195,6 +195,9 @@
 				
  		    	
  		    	*/
+ 		    	 // 清除原来的数据
+ 		    	 $('#accordion').empty();
+ 		    	 
  		    	 for(var i=0; i<jsonDataArr.length;i++){
  		    		
  		    		var singleLine = jsonDataArr[i];
