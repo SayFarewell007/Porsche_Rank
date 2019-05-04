@@ -262,16 +262,16 @@ public class OrdersController
 				
 			}
 			
-			//System.out.println("【【【【【secondPorscheCountByNameNum】】】】】" + secondPorscheCountByNameNum);
+			System.out.println("【【【【【secondPorscheCountByNameNum】】】】】" + secondPorscheCountByNameNum);
 			
 			int secondNotPorscheCountByNameNum = 0;   // 二手非保时捷收购数量
-			if (secondPorscheCountByName.size() > 0 && secondNotPorscheCountByName.get(0) != null) {
+			if (secondNotPorscheCountByName.size() > 0 && secondNotPorscheCountByName.get(0) != null) {
 				HashMap<String, Object> hashMap = secondNotPorscheCountByName.get(0);
 				long tmpNum = (Long)hashMap.get("secondHandNotPorscheCount");
 				secondNotPorscheCountByNameNum = Long.valueOf(tmpNum).intValue();
 			}
 			
-			//System.out.println("【【【【【secondNotPorscheCountByNameNum】】】】】" +secondNotPorscheCountByNameNum);
+			System.out.println("【【【【【secondNotPorscheCountByNameNum】】】】】" +secondNotPorscheCountByNameNum);
 			
 			Integer totalAccessoryNum = 0;
 			Integer totalNotAccessoryNum = 0;
@@ -377,11 +377,12 @@ public class OrdersController
 						secondHandPorschePoint = secondHandPorschePoint + rule.getValue1() * secondPorscheCountByNameNum;
 						secondHandNotPorschePoint = secondHandNotPorschePoint + rule.getValue2() * (secondNotPorscheCountByNameNum > 0 ? 1 : 0);
 						secondHandNonePoint = secondHandNonePoint + rule.getPoints() * (((secondPorscheCountByNameNum == 0)&&(secondNotPorscheCountByNameNum == 0)) ? 1 : 0);
-						System.out.println(orders + "命中二手车规则：" + rule.getText() + "，记" + (rule.getValue1() * secondPorscheCountByNameNum + rule.getValue2() * (secondNotPorscheCountByNameNum > 0 ? 1 : 0) + (((secondPorscheCountByNameNum == 0)&&(secondNotPorscheCountByNameNum == 0)) ? 1 : 0)) + "分");
+						System.out.println(orders + "命中二手车规则：" + rule.getText() + "，记" + (rule.getValue1() * secondPorscheCountByNameNum + rule.getValue2() * (secondNotPorscheCountByNameNum > 0 ? 1 : 0) + (((secondPorscheCountByNameNum == 0)&&(secondNotPorscheCountByNameNum == 0)) ? 1 : 0)*rule.getPoints()) + "分");
 						
 						HashMap<String, String> tMap = new HashMap<>();
 						tMap.put("text", "命中" + orders.getModel() + "二手车规则：【" + rule.getText() + "】");
-						tMap.put("point", Integer.valueOf((rule.getValue1() * secondPorscheCountByNameNum + rule.getValue2() * (secondNotPorscheCountByNameNum > 0 ? 1 : 0) + (((secondPorscheCountByNameNum == 0)&&(secondNotPorscheCountByNameNum == 0)) ? 1 : 0))).toString());
+						int value = (rule.getValue1() * secondPorscheCountByNameNum) + (rule.getValue2() * (secondNotPorscheCountByNameNum > 0 ? 1 : 0)) + ((((secondPorscheCountByNameNum == 0)&&(secondNotPorscheCountByNameNum == 0)) ? 1 : 0)*rule.getPoints());
+						tMap.put("point", String.valueOf(value));
 						pointsRemarkList.add(tMap);
 					}
 					
