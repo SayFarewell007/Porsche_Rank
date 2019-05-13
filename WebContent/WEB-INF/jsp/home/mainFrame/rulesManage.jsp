@@ -94,6 +94,52 @@
   				<div align="center" style="width:80%;height:0px;border-top:1px black dashed;" />
   				</td>
   				</tr>
+  				
+  				<!-- ================================================================================================ -->		  
+  				    <!-- 货源考核项目 -->
+  				 
+  				 <tr>
+  				 		<td colspan="2"> <label>货源考核<br></label></td>
+  				  </tr>
+			<tr>
+			<td>
+			
+			如果车辆货源是<select id="condition1_source" name="condition1_source" class="easyui-combobox" style="width:100px;" data-options="editable: false " >
+					 <option value="0" selected>条件1</option>
+					 <option value="1">现货</option>
+    		     	 <option value="2">在途</option>
+   					 <option value="3">自选配</option>
+   					 <option value="4">OB奖励</option>
+    
+				</select>
+				时，记
+			    <input id="points_source" name="points_source" class="easyui-numberbox" style="width:50px;" data-options="min:-100,max:100">分
+    		</td>
+    		<td>
+    		<a href="javascript:void(0);" onclick="addSourceTypeRule()"  class="btn btn-default">增加规则</a>
+    		<a href="javascript:void(0);" onclick="delSourceTypeRule()"  class="btn btn-default">删除规则</a>
+    		</td>			    
+    		</tr>
+    
+  				  
+  				  <tr>
+  				  
+  				  <td>
+  				  <div id="datalist1_source" class="easyui-datalist" title="已有货源考核规则" style="width:800px;height:250px" data-options="
+						url: 'datalist_data1.json',
+						method: 'get',
+						checkbox: true,
+						selectOnCheck: false,
+						onBeforeSelect: function(){return false;}
+						">
+				  </div>
+  				  </td>
+  				  <td>
+  				  <a href="javascript:void(0);" onclick="delSourceTypeRule()"  class="btn btn-default">删除规则</a>
+  				  </td>
+  				  </tr>
+  				  
+  				  
   		 <!-- ================================================================================================ -->		
   				  <!-- 精品考核 -->
   				  
@@ -309,6 +355,7 @@
 	data3 = [];
 	data4 = [];
 	data5 = [];
+	data6 = [];
 	var allRulesArr = [];
 	var i = 0;
 	var data;
@@ -481,6 +528,61 @@
 		}
 		data4 = tmpArr.slice();
 		$('#datalist1_paymode').datalist("loadData",data4);
+		
+	}
+	
+function addSourceTypeRule() {
+		
+	 	var condition1 = document.getElementsByName("condition1_source")[0].value;
+		var points = document.getElementsByName("points_source")[0].value; 
+		data = $('#datalist1_source').datalist("getData");
+		data6 = data.rows;
+		
+		if(condition1 == '0'){
+			alert("请先选择要添加的货源种类");
+			return false;
+		}
+		
+		if(points == '' || points == null){
+			alert("计分不能为空，请输入计分");
+			return false;
+		}
+		
+		if(data6.length > 0 ){
+			
+			for(var i =0; i< data6.length;i++){
+				var tmpRow = data6[i];
+				if(tmpRow.source == condition1){
+					alert("新增条件与已有条件存在冲突，无法添加");
+					return false;
+				}
+				
+			}
+		}
+		
+		
+		var i = data.total + 1;
+		
+		//var strDisplay = "";
+		var strDisplay =  "如果车辆货源是" + $('#condition1_source').combobox("getText");
+		
+		strDisplay += "时，记" + $('#points_source').numberbox("getValue") + "分";
+		
+		data6.push({"id":i,"text":strDisplay,"cartype": selectedCarType,"ruletype":"SourceTypeRule","condition1":condition1,"value1":0,"condition2":"","value2":0,"points":points});
+		$('#datalist1_source').datalist("loadData",data6);
+		
+	}
+	
+	function delSourceTypeRule() {
+		var tmpArr = new Array();
+		var delArr = $('#datalist1_source').datalist("getChecked");
+		for(var i=0;i < data6.length;i++){
+			if(!delArr.includes(data6[i])){
+				tmpArr.push(data6[i]);
+			}
+		}
+		data6 = tmpArr.slice();
+		$('#datalist1_source').datalist("loadData",data6);
 		
 	}
 	
@@ -856,6 +958,17 @@
 			
 		}
 		
+		data = $('#datalist1_source').datalist("getData");
+		var dataArr = data.rows;
+		
+		if(dataArr.length > 0){
+			
+			for(var i=0 ; i<dataArr.length ; i++){
+				allRulesArr.push(dataArr[i]);
+			}
+			
+		}
+		
 		//alert(allRulesArr);
 		
 		$.ajax({
@@ -946,12 +1059,14 @@
 	    	var data_NotAccessoryTypeRule = [];
 	    	var data_PayModeTypeRule = [];
 	    	var data_SecondHandTypeRule = [];
+	    	var data_SourceTypeRule = [];
 	    	//重新加载数据显示datalist
 	    	$('#datalist1').datalist("loadData",data_carTypeRule);
 	    	$('#datalist1_acc').datalist("loadData",data_AccessoryTypeRule);
 	    	$('#datalist1_notacc').datalist("loadData",data_NotAccessoryTypeRule);
 	    	$('#datalist1_paymode').datalist("loadData",data_PayModeTypeRule);
 	    	$('#datalist1_secondhand').datalist("loadData",data_SecondHandTypeRule);
+	    	$('#datalist1_source').datalist("loadData",data_SourceTypeRule);
 	    		
 	    		
 	    		
@@ -991,6 +1106,8 @@
      		    				data_PayModeTypeRule.push(tmp_rule);
      		    			}else if(tmp_rule.ruletype == "SecondHandTypeRule"){
      		    				data_SecondHandTypeRule.push(tmp_rule);
+     		    			}else if(tmp_rule.ruletype == "SourceTypeRule"){
+     		    				data_SourceTypeRule.push(tmp_rule);
      		    			}
      		    			
      		    		}
@@ -1001,6 +1118,7 @@
      		    		$('#datalist1_notacc').datalist("loadData",data_NotAccessoryTypeRule);
      		    		$('#datalist1_paymode').datalist("loadData",data_PayModeTypeRule);
      		    		$('#datalist1_secondhand').datalist("loadData",data_SecondHandTypeRule);
+     		    		$('#datalist1_source').datalist("loadData",data_SourceTypeRule);
      		    		
      		    	}
 			    

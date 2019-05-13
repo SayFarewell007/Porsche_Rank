@@ -120,6 +120,47 @@
 		
 	}
 	
+	function getPayMode(item){
+		
+		if(item == '1'){
+			return '先付后贷';
+		}
+		
+		if(item == '2'){
+			return '正常贷款';
+		}
+		
+		if(item == '3'){
+			return '一次性';
+		}
+		
+			
+		return '未知';
+		
+	}
+	
+	function getSource(item){
+		
+		if(item == '1'){
+			return '现货';
+		}
+		
+		if(item == '2'){
+			return '在途';
+		}
+		
+		if(item == '3'){
+			return '自选配';
+		}
+		
+		if(item == '4'){
+			return 'OB奖励';
+		}
+		
+			
+		return '未知';
+		
+	}
 	
 	function getSummaryReport(yyyymm){
 		
@@ -205,7 +246,7 @@
  		    		
  		    		//var line1 = '<div class="item">';
  		    		var line1 = '<div class="item">' + '<img src="img/Location-Pin.png" alt="">' + '<h3>第'+ singleLine.rank +'名:</h3><h3>'+ singleLine.username +'</h3><h3  style="float:right;width:20%;color:red;font-size:22px;text-shadow:1px 1px 1px #000;">'+singleLine.totalPoints+'分</h3></div>' + '<p style="font-size:15px;">';
- 		    		line1 += '<table width="80%" border="1" cellspacing="0" border-color="green" color="white" cellpadding="1" bgcolor="white"><tr><td>销售日期</td><td width="30%">销售车型</td><td>精品</td><td>非搭售精品</td><td>付款方式</td><td>收购二手车品牌</td></tr>';
+ 		    		line1 += '<table width="80%" border="1" cellspacing="0" border-color="green" color="white" cellpadding="1" bgcolor="white"><tr><td>销售日期</td><td width="30%">销售车型</td><td>精品</td><td>非搭售精品</td><td>付款方式</td><td>货源</td><td>收购二手车品牌</td></tr>';
  		    		
  		    		
  		    		var ordersArr = singleLine.orders;
@@ -213,7 +254,11 @@
  		    		if(ordersArr.length > 0){
  		    			
  		    			for(var k=0; k< ordersArr.length; k++){
- 		    				line1 += ('<tr><td>'+ordersArr[k].tranDate+'</td><td>'+ordersArr[k].model+'</td><td>'+ordersArr[k].accessory+'</td><td>'+ordersArr[k].notAccessory+'</td><td>'+ordersArr[k].payMode+'</td><td>'+ordersArr[k].secondHandCarType+'</td></tr>');
+ 		    				
+ 		    				
+ 		    				
+ 		    				
+ 		    				line1 += ('<tr><td>'+ordersArr[k].tranDate+'</td><td>'+ordersArr[k].model+'</td><td>'+ordersArr[k].accessory+'</td><td>'+ordersArr[k].notAccessory+'</td><td>'+ getPayMode(ordersArr[k].payMode) +'</td><td>'+ getSource(ordersArr[k].source) +'</td><td>'+ordersArr[k].secondHandCarType+'</td></tr>');
  		    			}
  		    			
  		    		} 

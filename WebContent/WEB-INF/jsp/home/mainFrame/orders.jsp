@@ -57,6 +57,20 @@
     
 				</select></td>
 		</tr>
+		
+		<tr>
+			<td><label>货源</label></td>
+			<td><select id="carSource" name="source" class="easyui-combobox" style="width:200px;" data-options="editable: false " >
+					 <option value="0" selected>---请选择货源---</option>
+    		     	 <option value="1">现货</option>
+   					 <option value="2">在途</option>
+   					 <option value="3">自选配</option>
+   					 <option value="4">OB奖励</option>
+    
+				</select></td>
+		</tr>
+		
+		
 		<tr>
 			<td><label>收购二手车品牌</label></td>
 		
@@ -158,6 +172,12 @@
 		str = $('#carPayMode').combobox('getValue');
 		if('0' == str || '---请选择付款方式---' == str || '' == str){
 			alert('请选择付款方式!');
+			return false;
+		}
+		
+		str = $('#carSource').combobox('getValue');
+		if('0' == str || '---请选择货源---' == str || '' == str){
+			alert('请选择货源!');
 			return false;
 		}
 		

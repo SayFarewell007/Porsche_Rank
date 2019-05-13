@@ -61,6 +61,7 @@ public class OrdersController
 								  @RequestParam("accessory") String accessory , 
 								  @RequestParam("notAccessory") String notAccessory , 
 								  @RequestParam("payMode") String payMode , 
+								  @RequestParam("source") String source , 
 								  /*@RequestParam("secondHandCarType") String secondHandCarType ,*/
 								  @RequestParam("secondHandCarTypeId") String secondHandCarTypeId , 
 								  /*@RequestParam("secondHandCarDetail") String secondHandCarDetail ,*/
@@ -71,7 +72,7 @@ public class OrdersController
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("home/mainFrame/orders");
 		
-		ordersService.addOrder(name, modelId, modelId,  accessory, notAccessory, payMode, secondHandCarTypeId, secondHandCarTypeId, secondHandCarDetailId, secondHandCarDetailId, tranDate);
+		ordersService.addOrder(name, modelId, modelId,  accessory, notAccessory, payMode, source, secondHandCarTypeId, secondHandCarTypeId, secondHandCarDetailId, secondHandCarDetailId, tranDate);
 		
 		return mav;
 	}
@@ -86,6 +87,7 @@ public class OrdersController
 								  @RequestParam("accessory") String accessory , 
 								  @RequestParam("notAccessory") String notAccessory , 
 								  @RequestParam("payMode") String payMode , 
+								  @RequestParam("source") String source , 
 								  @RequestParam("secondHandCarType") String secondHandCarType ,
 								  /*@RequestParam("secondHandCarTypeId") String secondHandCarTypeId , */
 								  @RequestParam("secondHandCarDetail") String secondHandCarDetail ,
@@ -93,7 +95,7 @@ public class OrdersController
 								  @RequestParam("tranDate") String tranDate  
 								   )
 	{
-		ordersService.updateOrder(Integer.valueOf(id), name, model, model,  accessory, notAccessory, payMode, secondHandCarType, secondHandCarType, secondHandCarDetail, secondHandCarDetail, tranDate);
+		ordersService.updateOrder(Integer.valueOf(id), name, model, model,  accessory, notAccessory, payMode, source, secondHandCarType, secondHandCarType, secondHandCarDetail, secondHandCarDetail, tranDate);
 		logger.info("更新了id=" + id + "的订单");
 		logger.info("id:" + id + "controller====" + "name:" + name + " model:" +model + "accessory:"+ accessory + "notAccessory:" + notAccessory + "payMode:" + payMode  +"secondHandCarType:" + secondHandCarType + "secondHandCarDetail:" + secondHandCarDetail + "tranDate:" + tranDate);
 		ModelAndView mav = new ModelAndView();
@@ -363,6 +365,25 @@ public class OrdersController
 					
 				}			
 			}
+
+			// 匹配货源规则，统计得分
+			int sourcePoint = 0;
+			for (Orders orders : ordersOfName ) {
+				for (Rules rule  : allRules) {
+					if (rule.getCartype().equals(orders.getModelId()) && rule.getRuletype().equals("SourceTypeRule")&& rule.getCondition1().equals(orders.getSource())) {
+						
+						sourcePoint += rule.getPoints();
+						System.out.println(orders + "命中货源规则：" + rule.getText() + "，记" + rule.getPoints() + "分");
+						
+						HashMap<String, String> tMap = new HashMap<>();
+						tMap.put("text", "命中" + orders.getModel() + "货源规则：【" + rule.getText() + "】");
+						tMap.put("point", Integer.valueOf(rule.getPoints()).toString());
+						pointsRemarkList.add(tMap);
+					}
+					
+				}			
+			}
+			
 			
 						
 			// 匹配二手车规则，统计得分
@@ -392,7 +413,7 @@ public class OrdersController
 			singleMap.put("pointsRemark", pointsRemarkList);
 			
 			// 用户名name 的总分为：
-			totalPoints = carSalesPoint + accessoryPoint + notAccessoryPoint + payModePoint + secondHandPorschePoint + secondHandNotPorschePoint + secondHandNonePoint;
+			totalPoints = carSalesPoint + accessoryPoint + notAccessoryPoint + payModePoint + sourcePoint + secondHandPorschePoint + secondHandNotPorschePoint + secondHandNonePoint;
 			System.out.println("======================");
 			System.out.println("用户" + name + "总分为：" + totalPoints);
 			

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import javax.xml.transform.Source;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +47,7 @@ public class OrdersService
 	
 	
 	public void addOrder(String name , String model , String modelId, String accessory , 
-						 String notAccessory , String payMode , String secondHandCarType, String secondHandCarTypeId,
+						 String notAccessory , String payMode , String source, String secondHandCarType, String secondHandCarTypeId,
 						 String secondHandCarDetail , String secondHandCarDetailId, String tranDate )
 	{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -55,14 +57,14 @@ public class OrdersService
 		String carModelName = carsMapper.getCarTypeNameById(modelId);
 		String secondHandBrand = carsMapper.getCarBrandNameById(secondHandCarTypeId);
 		String secondHandCarTypeName = carsMapper.getCarTypeNameById(secondHandCarDetailId);
-		Orders orders = new Orders(name, carModelName, modelId, accessory, notAccessory, payMode, secondHandBrand, secondHandCarTypeId, secondHandCarTypeName, secondHandCarDetailId, tranDate, inputDate, modDate);
+		Orders orders = new Orders(name, carModelName, modelId, accessory, notAccessory, payMode, source, secondHandBrand, secondHandCarTypeId, secondHandCarTypeName, secondHandCarDetailId, tranDate, inputDate, modDate);
 		
 		ordersMapper.add(orders);
 		logger.info("新增订单：" + orders.toString());
 	}
 	
 	public void updateOrder(Integer id, String name , String model , String modelId, String accessory , 
-			 String notAccessory , String payMode , String secondHandCarType, String secondHandCarTypeId,
+			 String notAccessory , String payMode , String source , String secondHandCarType, String secondHandCarTypeId,
 			 String secondHandCarDetail , String secondHandCarDetailId, String tranDate )
 	{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -72,7 +74,7 @@ public class OrdersService
 		String secondBrandName = carsMapper.getCarBrandNameById(secondHandCarTypeId);
 		String secondCarTypeName = carsMapper.getCarTypeNameById(secondHandCarDetailId);
 		//System.out.println("before new order:" + secondCarTypeName);
-		Orders orders = new Orders(id, name, carTypeName, modelId, accessory, notAccessory, payMode, secondBrandName, secondHandCarTypeId, secondCarTypeName, secondHandCarDetailId, tranDate, tranDate, modDate);
+		Orders orders = new Orders(id, name, carTypeName, modelId, accessory, notAccessory, payMode, source, secondBrandName, secondHandCarTypeId, secondCarTypeName, secondHandCarDetailId, tranDate, tranDate, modDate);
 		//System.out.println("update===" + orders);
 		ordersMapper.update(orders);
 		logger.info("修改订单：" + orders.toString());

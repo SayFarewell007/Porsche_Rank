@@ -27,6 +27,7 @@
 			<td>精品</td>
 			<td>非搭售精品</td>
 			<td>付款方式</td>
+			<td>货源</td>
 			<td>收购二手车品牌</td>
 			<td>收购二手车型号</td>
 			<td>销售人</td>
@@ -44,6 +45,14 @@
 				<td>${c.notAccessory}</td>
 				<td style="display:none;">${c.payMode}</td>
 				<td><c:if test="${c.payMode =='1'}">先付后贷车辆</c:if><c:if test="${c.payMode =='2'}">正常贷款车辆</c:if><c:if test="${c.payMode =='3'}">一次性车辆</c:if><c:if test="${c.payMode =='0'}"></c:if></td>
+				<td style="display:none;">${c.source}</td>
+				<td>
+					<c:if test="${c.source =='1'}">现货</c:if>
+					<c:if test="${c.source =='2'}">在途</c:if>
+					<c:if test="${c.source =='3'}">自选配</c:if>
+					<c:if test="${c.source =='4'}">OB奖励</c:if>
+					<c:if test="${c.source =='0'}">无</c:if>
+				</td>
 				<td style="display:none;">${c.secondHandCarTypeId}</td>
 				<td>${c.secondHandCarType}</td>
 				<td style="display:none;">${c.secondHandCarDetailId}</td>
@@ -124,6 +133,19 @@
 					</div>
 					<br><br>
 					
+					<label class="col-md-4 control-label" style="width:130px;float:left;">货源：</label>
+					<div class="col-md-8" style="float: left">
+						<select id="carSource" name="source" class="easyui-combobox" style="width:200px;" data-options="editable: false " data-options="editable: false " >
+					 		<option value="0" selected>---请选择货源---</option>
+    		     			 <option value="1">现货</option>
+   							 <option value="2">在途</option>
+   							 <option value="3">自选配</option>
+   							 <option value="4">OB奖励</option>
+    
+						</select>
+					</div>
+					<br><br>
+					
 					<label class="col-md-4 control-label" style="width:130px;float:left;">收购二手品牌：</label>
 					<div class="col-md-8" style="float: left">
 					 	<!-- <input type="text" class="form-control" name="secondHandCarType" value=""
@@ -185,7 +207,7 @@
 			
 			// 0:id
 			var content = btnThis.closest('tr').find('td').eq(0).text();
-			alert("id:"+ content);
+			//alert("id:"+ content);
 			modal.find('input[name="id"]').val(content);
 			// 1:tranDate
 			var content = btnThis.closest('tr').find('td').eq(1).text();
@@ -206,19 +228,27 @@
 			$('#carNotAccessory').numberbox('setValue',content);
 			
 			var content = btnThis.closest('tr').find('td').eq(6).text();
-			
+			//alert('content6:' + content);
+			// 6是隐藏值
 			$('#carPayMode').combobox('select', content);
 			
+			
+			// 8是隐藏值
 			var content = btnThis.closest('tr').find('td').eq(8).text();
 			
+			//alert('content8:' + content);
+			$('#carSource').combobox('select', content);
+			
+			var content = btnThis.closest('tr').find('td').eq(10).text();
+			//alert('content9:' + content);
 			$('#carSecondHandCarType').combobox('setValue', content);
 			
 			modal.find('input[name="secondHandCarType"]').val(content);
-			var content = btnThis.closest('tr').find('td').eq(10).text();
+			var content = btnThis.closest('tr').find('td').eq(12).text();
 			$('#carSecondHandCarDetail').combobox('setValue', content);
 			
 			modal.find('input[name="secondHandCarDetail"]').val(content);
-			var content = btnThis.closest('tr').find('td').eq(12).text();
+			var content = btnThis.closest('tr').find('td').eq(14).text();
 			modal.find('input[name="name"]').val(content);
 			//var content = btnThis.closest('tr').find('td').eq(9).text();
 
@@ -249,6 +279,12 @@
 			str = $('#carPayMode').combobox('getValue');
 			if('0' == str || '---请选择付款方式---' == str || '' == str){
 				alert('请选择付款方式!');
+				return false;
+			}
+			
+			str = $('#carSource').combobox('getValue');
+			if('0' == str || '---请选择货源---' == str || '' == str){
+				alert('请选择货源!');
 				return false;
 			}
 			

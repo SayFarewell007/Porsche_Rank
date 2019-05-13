@@ -1,6 +1,5 @@
 package leon.sms.pojo;
 
-
 public class Orders {
 	
 	private int id;
@@ -10,6 +9,7 @@ public class Orders {
 	private Float accessory;
 	private Float notAccessory;
 	private String payMode;
+	private String source;
 	private String secondHandCarType;
 	private String secondHandCarTypeId;
 	private String secondHandCarDetail;
@@ -44,7 +44,7 @@ public class Orders {
 
 
 	public Orders(String name, String model, String modelId,
-			String accessory, String notAccessory, String payMode,
+			String accessory, String notAccessory, String payMode, String source,
 			String secondHandCarType, String secondHandCarTypeId,
 			String secondHandCarDetail, String secondHandCarDetailId,
 			String tranDate, String inputDate, String modDate) {
@@ -56,6 +56,7 @@ public class Orders {
 		this.accessory = Float.valueOf(accessory);
 		this.notAccessory = Float.valueOf(notAccessory);
 		this.payMode = payMode;
+		this.source = source;
 		this.secondHandCarType = secondHandCarType;
 		this.secondHandCarTypeId = secondHandCarTypeId;
 		this.secondHandCarDetail = secondHandCarDetail;
@@ -66,7 +67,7 @@ public class Orders {
 	}
 	
 	public Orders(Integer id, String name, String model, String modelId,
-			String accessory, String notAccessory, String payMode,
+			String accessory, String notAccessory, String payMode, String source,
 			String secondHandCarType, String secondHandCarTypeId,
 			String secondHandCarDetail, String secondHandCarDetailId,
 			String tranDate, String inputDate, String modDate) {
@@ -79,6 +80,7 @@ public class Orders {
 		this.accessory = Float.valueOf(accessory);
 		this.notAccessory = Float.valueOf(notAccessory);
 		this.payMode = payMode;
+		this.source = source;
 		this.secondHandCarType = secondHandCarType;
 		this.secondHandCarTypeId = secondHandCarTypeId;
 		this.secondHandCarDetail = secondHandCarDetail;
@@ -104,6 +106,21 @@ public class Orders {
 	public String getName() {
 		return name;
 	}
+
+	
+	
+	public String getSource() {
+		return source;
+	}
+
+
+
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+
 
 
 	public void setName(String name) {
